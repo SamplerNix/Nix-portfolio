@@ -1,0 +1,155 @@
+/* Container */
+
+.container {
+background: #0f0f0f;
+min-height: 100vh;
+padding: 40px;
+color: #eaeaea;
+font-family: "Poppins", sans-serif;
+}
+
+/* Headings */
+
+.title {
+font-size: 36px;
+font-weight: 600;
+text-align: center;
+margin-bottom: 30px;
+background: linear-gradient(90deg, #13b0f5, #e70faa);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+/* Section Divider */
+
+.divider {
+margin: 40px 0;
+border: none;
+height: 1px;
+background: linear-gradient(90deg, transparent, #444, transparent);
+}
+
+/* Project List */
+
+.projectList {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+gap: 25px;
+}
+
+/* Project Card */
+
+.projectCard {
+background: #1a1a1a;
+border-radius: 14px;
+padding: 20px;
+box-shadow: 0 0 20px rgba(0,0,0,0.6);
+transition: all 0.25s ease;
+}
+
+.projectCard:hover {
+transform: translateY(-6px);
+box-shadow: 0 0 25px rgba(231, 15, 170, 0.25);
+}
+
+/* Project Title */
+
+.projectTitle {
+font-size: 20px;
+font-weight: 600;
+margin-bottom: 15px;
+}
+
+/* Buttons */
+
+.buttonGroup {
+display: flex;
+gap: 10px;
+}
+
+/* Edit Button */
+
+.editBtn {
+flex: 1;
+background: linear-gradient(90deg, #13b0f5, #3b82f6);
+border: none;
+padding: 8px 14px;
+border-radius: 8px;
+color: white;
+font-weight: 500;
+cursor: pointer;
+transition: 0.2s;
+}
+
+.editBtn:hover {
+transform: scale(1.05);
+}
+
+/* Delete Button */
+
+.deleteBtn {
+flex: 1;
+background: linear-gradient(90deg, #ff4d4d, #ff1a1a);
+border: none;
+padding: 8px 14px;
+border-radius: 8px;
+color: white;
+font-weight: 500;
+cursor: pointer;
+transition: 0.2s;
+}
+
+.deleteBtn:hover {
+transform: scale(1.05);
+}
+
+/* Edit Form */
+
+.editForm {
+margin-top: 30px;
+background: #1a1a1a;
+padding: 25px;
+border-radius: 12px;
+max-width: 500px;
+margin-inline: auto;
+box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+/* Inputs */
+
+.editForm input,
+.editForm textarea {
+width: 100%;
+margin-bottom: 15px;
+padding: 10px;
+background: #0f0f0f;
+border: 1px solid #333;
+border-radius: 8px;
+color: #fff;
+font-size: 14px;
+}
+
+.editForm input:focus,
+.editForm textarea:focus {
+outline: none;
+border-color: #13b0f5;
+}
+
+/* Update Button */
+
+.updateBtn {
+width: 100%;
+padding: 10px;
+background: linear-gradient(90deg, #13b0f5, #e70faa);
+border: none;
+border-radius: 8px;
+font-size: 15px;
+font-weight: 600;
+color: white;
+cursor: pointer;
+transition: 0.25s;
+}
+
+.updateBtn:hover {
+transform: scale(1.04);
+}

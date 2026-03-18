@@ -1,0 +1,40 @@
+.contan{
+    text-align: center;
+    justify-content: center;
+    display: grid;
+}
+.contan input{
+    min-width: 10px;
+    height: 20px;
+    margin: 0 auto;
+    border-radius: 30px;
+    text-align: center;
+    border:none;
+    font-size: 15px;
+    font-weight: 600;
+}
+.contan h2{
+    align-items: center;
+    color: #cccc;
+}
+.contan h1{
+    align-items: center;
+    color: #cccc;
+}
+.contan button{
+    align-items: center;
+    max-width: 100px;
+    height: 30px;
+    border-radius: 23px;
+    border: none;
+    font-size:18px;
+    font-weight: 600;
+    padding: auto;
+    margin-top: 20px;
+    background-color: aqua;
+
+}
+.link{
+    text-decoration: none;
+    color:white;
+}

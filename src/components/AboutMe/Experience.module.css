@@ -1,0 +1,47 @@
+  .h4 {
+    font-size: 48px;
+    font-weight: 600;
+    color: #cccccc;
+    justify-content: center;
+    display: flex;
+    margin-top: 150px;
+  }
+  .p {
+    color: #a7a7a7;
+    font-size: 18px;
+    display: flex;
+    max-width: 708px;
+    margin: 0 auto;
+    margin-top: 49;
+    height: 108px;
+    text-align: justify;
+  }
+  .title{
+    font-size:24px;
+    color: #cccccc;
+    display: flex;
+    justify-content: space-between;
+  }
+  .title button{
+    max-width:90px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #D7FFE0;
+    color: #018C0F;
+    font-size:12px;
+    align-items: center;
+    /* border: none; */
+    font-weight: 750;
+    border: 2px solid #018C0F;
+  }
+  .organisation{
+    font-size: 15px;
+    color:#A7A7A7;
+    justify-content:space-between;
+    display: flex;
+    margin-top:10px;
+  }
+  .column{
+    display: column;
+  }
+  

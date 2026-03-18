@@ -1,0 +1,20 @@
+.h1{
+    color: #cccc;
+    font-size: 58px;
+    font-weight: 600;
+    margin-top: 325px;
+    margin-left: 100px;
+}
+.contactpage{
+    margin: 0 auto;
+    justify-content: center;
+}
+.h2{
+    color: #cccc;
+    font-size: 58px;
+    font-weight: 600;
+    background: linear-gradient(90deg, #13b0f5 3%, #e70faa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 100px;
+}

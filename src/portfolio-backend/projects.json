@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1773814364820,
+    "title": "Petroleum Management System",
+    "description": "This is a Java-based web application that helps manage petroleum sales, fuel types, and stations. It is built using Servlets, JSP, JDBC, and PostgreSQL.",
+    "tech": "JAVA (Servlet,JDBC),",
+    "link": "",
+    "gitlink": "https://github.com/SamplerNix/Petroleum-Management",
+    "image": "1773814364815-Rectangle 22.png"
+  },
+  {
+    "id": 1773814927963,
+    "title": "BLISS NGO",
+    "description": "Developed a dynamic online platform for Bliss NGO to promote mental health awareness.\r\nThe site features a user-friendly interface with resources, counseling services, and\r\ncommunity forums, creating a safe, inclusive space for support and connection.",
+    "tech": "HTML,CSS, JAVASCRIPT",
+    "link": "https://ngobliss.netlify.app/",
+    "gitlink": "",
+    "image": "1773814927953-Screenshot 2026-03-18 115141.png"
+  },
+  {
+    "id": 1773815137634,
+    "title": "Morse_code",
+    "description": "I created morse code application using C++ language. But this would've been successful only\r\nif it is Physicaly Possible to make it more scalable and practical i used Arduino Uno which is\r\npart of IoT(Internet of things)",
+    "tech": "c++",
+    "link": "https://drive.google.com/file/d/1JVOzp2eFky5Zj_S9d8q6G0dzcp5mt49Y/view",
+    "gitlink": "",
+    "image": "1773815137632-testing1.png"
+  },
+  {
+    "id": 1773815271354,
+    "title": "Brick_Breaker",
+    "description": "This is a simple 2D brick breaker game developed in Java using AWT (Abstract Window\r\nToolkit) and Swing for the graphical user interface.The game features a paddle controlled by\r\nthe player,a bouncing ball, and multiple bricks arranged in a grid.The player’s goal is to\r\nbreak all the bricks by bouncing the ball off the paddle without letting it fall.",
+    "tech": "JAVA",
+    "link": "https://github.com/SamplerNix/Java_project",
+    "gitlink": "https://github.com/SamplerNix/Java_project",
+    "image": "1773815271351-brick.jpg"
+  },
+  {
+    "id": 1773816743109,
+    "title": "Choclate",
+    "description": "This is Chocolate website which defines the front-end using Photoshop. all the banner is made with Photoshop and then combined with HTML, CSS, JavaScript to make it work and demonstrate the good UI design",
+    "tech": "HTML, CSS, JavaScript",
+    "link": "https://ksitijchocolate.netlify.app/",
+    "gitlink": "",
+    "image": "1773816743106-choclate.jpg"
+  },
+  {
+    "id": 1773817175717,
+    "title": "E-Commerce ",
+    "description": "This is an shopping website for Footwear, this was first website that build when i was trying to find a way in web development ,back then i  learned the basic of HTML , CSS and tried to implement init  ",
+    "tech": "HTML,CSS, JavaScript",
+    "link": "https://nixify.netlify.app/",
+    "gitlink": "",
+    "image": "1773817175714-e-commerce.jpg"
+  }
+]

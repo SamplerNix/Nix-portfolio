@@ -1,0 +1,121 @@
+.container{
+  width:85%;
+  margin:auto;
+  padding:40px 0;
+  color:#ffffff;
+}
+
+.title{
+  font-size:40px;
+  font-weight:600;
+  margin-bottom:30px;
+  text-align:center;
+  color:#cccccc;
+}
+
+/* ===== ADD TECH FORM ===== */
+
+.form{
+  background:#111111;
+  padding:25px;
+  border-radius:12px;
+  width:400px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  border:1px solid #1e1e1e;
+}
+
+.input{
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #333;
+  background:#0b0b0b;
+  color:white;
+  font-size:15px;
+}
+
+.input:focus{
+  outline:none;
+  border:1px solid #13b0f5;
+}
+
+/* file input */
+
+.fileInput{
+  color:#aaa;
+}
+
+/* add button */
+
+.addBtn{
+  background:linear-gradient(90deg,#13b0f5,#e70faa);
+  border:none;
+  padding:10px;
+  border-radius:6px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.addBtn:hover{
+  transform:scale(1.05);
+}
+
+/* ===== TECH GRID ===== */
+
+.techGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:30px;
+  margin-top:40px;
+}
+
+/* tech card */
+
+.techCard{
+  background:#111111;
+  border-radius:12px;
+  padding:25px;
+  text-align:center;
+  border:1px solid #1e1e1e;
+  transition:0.3s;
+}
+
+.techCard:hover{
+  transform:translateY(-5px);
+  border:1px solid #333;
+}
+
+/* icon */
+
+.techIcon{
+  width:60px;
+  margin-bottom:15px;
+}
+
+/* tech name */
+
+.techName{
+  font-size:18px;
+  margin-bottom:15px;
+  color:#e5e5e5;
+}
+
+/* delete button */
+
+.deleteBtn{
+  background:#ff4d4d;
+  border:none;
+  padding:8px 16px;
+  border-radius:6px;
+  color:white;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.deleteBtn:hover{
+  background:#ff1a1a;
+}
