@@ -19,7 +19,9 @@
   background:#111111;
   padding:25px;
   border-radius:12px;
-  width:400px;
+  width:100%;
+  max-width:400px;
+  box-sizing:border-box;
   margin:auto;
   display:flex;
   flex-direction:column;

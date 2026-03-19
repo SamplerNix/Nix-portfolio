@@ -81,6 +81,13 @@ useEffect(() => {
 
 export default AboutMe;
 const Aboutme = styled.div`
+  animation: fadeInUp 0.8s ease-out forwards;
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   h4 {
     font-size: 48px;
     font-weight: 600;
@@ -93,10 +100,12 @@ const Aboutme = styled.div`
     color: #a7a7a7;
     font-size: 18px;
     display: flex;
-   max-width: 1193px;
-    margin: 0 auto;
-    margin-top: 49;
-    height: 200px;
+    width: 100%;
+    max-width: 1193px;
+    margin: 49px auto 0;
+    height: auto;
+    padding: 0 20px;
+    box-sizing: border-box;
     /* background-color:red; */
     text-align: justify;
   }

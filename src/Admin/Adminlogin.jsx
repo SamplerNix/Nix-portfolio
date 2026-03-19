@@ -6,25 +6,28 @@ function Adminlogin(){
  const [password,setPassword] = useState("")
  const navigate = useNavigate()
 
- const handleLogin = (e) => {
+const handleLogin = async (e) => {
 
-  e.preventDefault()
+    e.preventDefault();
 
-  const correctPassword = "admin123"; // change this
+    const res = await fetch("http://localhost:5000/admin-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ password })
+    });
 
-  if(password === correctPassword){
+    const data = await res.json();
 
-   localStorage.setItem("adminAuth","true")
+    if(data.success){
+      localStorage.setItem("adminAuth","true");
+      navigate("/admin/dashboard");
+    } else {
+      alert("Wrong password");
+    }
 
-   navigate("/admin/dashboard")
-
-  }else{
-
-   alert("Wrong password")
-
-  }
-
- }
+  };
 
  return(
 

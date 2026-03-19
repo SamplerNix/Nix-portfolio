@@ -10,10 +10,12 @@
     color: #a7a7a7;
     font-size: 18px;
     display: flex;
+    width: 100%;
     max-width: 708px;
-    margin: 0 auto;
-    margin-top: 49;
-    height: 108px;
+    margin: 49px auto 0;
+    height: auto;
+    padding: 0 20px;
+    box-sizing: border-box;
     text-align: justify;
   }
   .title{
@@ -42,6 +44,7 @@
     margin-top:10px;
   }
   .column{
-    display: column;
+    display: flex;
+    flex-direction: column;
   }
   

@@ -8,6 +8,12 @@ color: #eaeaea;
 font-family: "Poppins", sans-serif;
 }
 
+@media(max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+}
+
 /* Headings */
 
 .title {
@@ -110,7 +116,9 @@ margin-top: 30px;
 background: #1a1a1a;
 padding: 25px;
 border-radius: 12px;
+width: 100%;
 max-width: 500px;
+box-sizing: border-box;
 margin-inline: auto;
 box-shadow: 0 0 20px rgba(0,0,0,0.7);
 }

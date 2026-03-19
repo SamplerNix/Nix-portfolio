@@ -3,9 +3,8 @@ body {
   background-color: black;
   margin: 0;
   place-items: center;
-  min-width: 1193px;
   height: 100vh;
   color: white;
   font-family: "poppins";
-  
+  overflow-x: hidden;
 }

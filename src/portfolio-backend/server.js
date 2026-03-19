@@ -3,12 +3,24 @@ const multer = require("multer");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+app.post("/admin-login", (req, res) => {
+
+  const { password } = req.body;
+
+  if (password === process.env.ADMIN_PASSWORD) {
+    res.json({ success: true });
+  } else {
+    res.status(401).json({ success: false });
+  }
+
+});
 // allow frontend to access uploaded files
 app.use("/uploads", express.static("uploads"));
 

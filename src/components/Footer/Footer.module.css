@@ -5,6 +5,12 @@
   margin-top:120px;
 }
 
+@media(max-width: 768px) {
+  .footer {
+    padding: 40px 20px;
+  }
+}
+
 .top{
   display:flex;
   justify-content:space-between;
@@ -86,8 +92,15 @@
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-@media(max-width: 600px){
-  .footerTop{
+@media(max-width:768px){
+  .top{
+    flex-direction:column;
+    gap:20px;
+    text-align:center;
+  }
+}
+@media(max-width:768px){
+  .bottom{
     flex-direction:column;
     gap:20px;
     text-align:center;

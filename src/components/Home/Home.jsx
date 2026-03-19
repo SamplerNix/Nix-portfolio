@@ -27,9 +27,16 @@ const Home = () => {
 
 export default Home;
 const Maincontent = styled.div`
-  margin-top: 220px;
+  margin-top: 120px;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeInUp 0.8s ease-out forwards;
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .hero{
   display:flex;
   justify-content:space-between;
@@ -38,6 +45,9 @@ const Maincontent = styled.div`
 
 /* Mobile fix */
 @media(max-width: 768px){
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
   .hero{
     flex-direction:column;
     text-align:center;
@@ -49,7 +59,7 @@ const Namecal = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 636px;
-  height: 297px;
+  height: auto;
   /* background-color:red; */
   h1 {
     font-size: 45px;
@@ -63,12 +73,25 @@ const Namecal = styled.div`
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  @media(max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+    .name {
+      font-size: 32px;
+    }
+  }
 `;
 const Gola=styled.div`
-width: 349px;
-  height: 349px;
+  width: 349px;
+  max-width: 80vw;
+  max-height: 80vw;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
   border-radius: 50%;
   padding: 8px;   /* border thickness */
+  box-sizing: border-box;
+  margin: 0 auto;
 
   background: linear-gradient(180deg,#E70FAA,#00C0FD);
 
@@ -84,17 +107,26 @@ img{
 }
 `;
 const Cvbutton=styled.div`
-button{
-  min-width:150px;
-  height:50px;
-  border-radius:25px;
-  border:none;
-  font-size:20px;
-  margin:0 auto;
-  font-weight:700;
-   background: linear-gradient(90deg, #13b0f5 3%, #e70faa 100%);
-   color:white;
-   cursor:pointer;
-}
-
-  `
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-top: 40px;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.4s forwards;
+  
+  @media(max-width: 768px) {
+    justify-content: center;
+  }
+  button{
+    min-width:150px;
+    height:50px;
+    border-radius:25px;
+    border:none;
+    font-size:20px;
+    font-weight:700;
+    background: linear-gradient(90deg, #13b0f5 3%, #e70faa 100%);
+    color:white;
+    cursor:pointer;
+  }
+`;

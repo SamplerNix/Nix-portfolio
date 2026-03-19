@@ -1,9 +1,11 @@
 import styled from "styled-components"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 const Techstack = () => {
 
   const [tech,setTech] = useState([])
+  const [isVisible, setIsVisible] = useState(false);
+  const domRef = useRef();
 
   useEffect(()=>{
 
@@ -11,18 +13,29 @@ const Techstack = () => {
     .then(res=>res.json())
     .then(data=>setTech(data))
 
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    if (domRef.current) observer.observe(domRef.current);
+    
+    return () => observer.disconnect();
   },[])
 
   return (
     <>
-      <section id="techstack">
+      <section id="techstack" ref={domRef}>
 
-        <Maincon>
+        <Maincon className={isVisible ? "animate" : ""}>
           <h4>TechStack</h4>
           <p>Technology that I've been working with recently</p>
         </Maincon>
 
-        <Icongal>
+        <Icongal className={isVisible ? "animate" : ""}>
 
           {tech.map((t)=>(
             <img
@@ -41,6 +54,16 @@ const Techstack = () => {
 
 export default Techstack
 const Maincon=styled.div`
+  opacity: 0;
+  &.animate {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
 h4{
     font-size:48px;
     font-weight:600;
@@ -58,9 +81,17 @@ p{
 }
 `;
 const Icongal=styled.div`
+  opacity: 0;
+  &.animate {
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+  }
 display:grid;
 grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 gap:100px;
 justify-items:center;
 padding:40px;
+@media(max-width: 768px) {
+  gap: 30px;
+  padding: 20px;
+}
 `;
