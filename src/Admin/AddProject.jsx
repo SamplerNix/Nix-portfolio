@@ -23,7 +23,7 @@ function AddProject() {
     formData.append("gitlink", gitlink);
     formData.append("image", image);
 
-    await fetch("http://localhost:5000/add-project", {
+    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/add-project`, {
       method: "POST",
       body: formData
     });

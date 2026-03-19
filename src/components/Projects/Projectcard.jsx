@@ -6,7 +6,7 @@ const Projectcard = ({ image, title, description, tech, link, gitlink }) => {
     <div className={styles.card}>
 
       <img
-        src={`http://localhost:5000/uploads/projects/${image}`}
+        src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/projects/${image}`}
         alt={title}
         className={styles.image}
       />

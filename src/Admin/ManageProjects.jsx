@@ -10,7 +10,7 @@ function ManageProjects() {
   // FETCH PROJECTS
   useEffect(() => {
 
-    fetch("http://localhost:5000/projects")
+    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/projects`)
       .then(res => res.json())
       .then(data => setProjects(data));
 
@@ -19,7 +19,7 @@ function ManageProjects() {
   // DELETE PROJECT
   const deleteProject = async (id) => {
 
-    await fetch(`http://localhost:5000/delete-project/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/delete-project/${id}`, {
       method: "DELETE"
     });
 
@@ -35,7 +35,7 @@ function ManageProjects() {
   // UPDATE PROJECT
   const updateProject = async () => {
 
-    await fetch(`http://localhost:5000/update-project/${editingProject.id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/update-project/${editingProject.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

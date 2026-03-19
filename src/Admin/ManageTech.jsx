@@ -8,7 +8,7 @@ function ManageTech(){
 
  useEffect(()=>{
 
-  fetch("http://localhost:5000/techstack")
+  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/techstack`)
   .then(res=>res.json())
   .then(data=>setTech(data))
 
@@ -16,7 +16,7 @@ function ManageTech(){
 
  const deleteTech = async(id)=>{
 
-  await fetch(`http://localhost:5000/delete-tech/${id}`,{
+  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/delete-tech/${id}`,{
     method:"DELETE"
   })
 
@@ -42,7 +42,7 @@ function ManageTech(){
 
       <img
        className={styles.techIcon}
-       src={`http://localhost:5000/uploads/tech/${t.icon}`}
+       src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/tech/${t.icon}`}
        alt={t.name}
       />
 

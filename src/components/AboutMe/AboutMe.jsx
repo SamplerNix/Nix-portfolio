@@ -16,7 +16,7 @@ const AboutMe = () => {
   const [Experiences, setExperiences] = useState([]);
 
 useEffect(() => {
-  fetch("http://localhost:5000/experience")
+  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/experience`)
     .then((res) => res.json())
     .then((data) => setExperiences(data));
 }, []);

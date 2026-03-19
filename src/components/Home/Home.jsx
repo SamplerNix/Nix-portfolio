@@ -1,7 +1,7 @@
 import styled from "styled-components";
 const Home = () => {
   const handleViewCV = () => {
- window.open("http://localhost:5000/uploads/mycv.pdf", "_blank");
+ window.open(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/mycv.pdf`, "_blank");
 };
   return (
     <div>
@@ -15,7 +15,7 @@ const Home = () => {
         I build things for web</h1>
       </Namecal>
       <Gola>
-      <img src="http://localhost:5000/uploads/profile/profile.jpg"/>
+      <img src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/profile/profile.jpg`}/>
       </Gola>
     </Maincontent>
     <Cvbutton>

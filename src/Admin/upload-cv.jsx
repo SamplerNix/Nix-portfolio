@@ -17,7 +17,7 @@ function UploadCV(){
 
   try{
 
-    const response = await fetch("http://localhost:5000/upload-cv",{
+    const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/upload-cv`,{
       method:"POST",
       body:formData
     })

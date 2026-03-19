@@ -14,7 +14,7 @@ function AddTech(){
   formData.append("name",name)
   formData.append("icon",icon)
 
-  await fetch("http://localhost:5000/add-tech",{
+  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/add-tech`,{
    method:"POST",
    body:formData
   })

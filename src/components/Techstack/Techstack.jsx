@@ -9,7 +9,7 @@ const Techstack = () => {
 
   useEffect(()=>{
 
-    fetch("http://localhost:5000/techstack")
+    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/techstack`)
     .then(res=>res.json())
     .then(data=>setTech(data))
 
@@ -40,7 +40,7 @@ const Techstack = () => {
           {tech.map((t)=>(
             <img
               key={t.id}
-              src={`http://localhost:5000/uploads/tech/${t.icon}`}
+              src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/tech/${t.icon}`}
               alt={t.name}
             />
           ))}

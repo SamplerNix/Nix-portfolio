@@ -12,7 +12,7 @@ function AddExperience(){
  const handleSubmit = async(e)=>{
   e.preventDefault()
 
-  await fetch("http://localhost:5000/add-experience",{
+  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/add-experience`,{
    method:"POST",
    headers:{
     "Content-Type":"application/json"

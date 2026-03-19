@@ -11,7 +11,7 @@ function UploadProfile() {
     const formData = new FormData()
     formData.append("image",image)
 
-    await fetch("http://localhost:5000/upload-profile",{
+    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/upload-profile`,{
       method:"POST",
       body:formData
     })

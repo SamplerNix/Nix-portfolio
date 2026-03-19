@@ -14,7 +14,7 @@ function ManageExperience(){
 
  useEffect(()=>{
 
-  fetch("http://localhost:5000/experience")
+  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/experience`)
   .then(res=>res.json())
   .then(data=>setExperiences(data));
 
@@ -23,7 +23,7 @@ function ManageExperience(){
 
  const deleteExperience = async(id)=>{
 
-  await fetch(`http://localhost:5000/delete-experience/${id}`,{
+  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/delete-experience/${id}`,{
    method:"DELETE"
   });
 
@@ -51,7 +51,7 @@ function ManageExperience(){
 
   e.preventDefault();
 
-  await fetch(`http://localhost:5000/update-experience/${editingExperience}`,{
+  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/update-experience/${editingExperience}`,{
    method:"PUT",
    headers:{
     "Content-Type":"application/json"
