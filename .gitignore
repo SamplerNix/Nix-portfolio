@@ -19,7 +19,7 @@ dist-ssr/
 .env.*
 
 # Uploads (VERY IMPORTANT for your project)
-uploads/
+# uploads/
 
 # Local files
 *.local
