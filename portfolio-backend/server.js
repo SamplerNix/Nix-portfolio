@@ -21,6 +21,11 @@ app.post("/admin-login", (req, res) => {
   }
 
 });
+//This one is for to wakeup our
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 // allow frontend to access uploaded files
 app.use("/uploads", express.static("uploads"));
 
@@ -347,6 +352,6 @@ app.put("/update-experience/:id", (req, res) => {
 
 });
 
-app.listen(5000, () => {
+app.listen(process.env.PORT ||5000, () => {
   console.log("Server running on port 5000");
 });

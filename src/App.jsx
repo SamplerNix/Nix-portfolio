@@ -6,6 +6,7 @@ import Projects from "./components/Projects/Projects";
 import AboutMe from "./components/AboutMe/AboutMe";
 import Contactform from "./components/Contactform/Contactform";
 import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import Adminlogin from "./Admin/Adminlogin";
 import Dashboard from "./Admin/dashboard";
 import UploadCV from "./Admin/upload-cv";
@@ -17,6 +18,17 @@ import ManageExperience from "./Admin/ManageExperience";
 import ProtectedRoute from "./Admin/ProtectedRoute";
 import Footer from "./components/Footer/Footer";
 function App() {
+  useEffect(() => {
+  const interval = setInterval(() => {
+    fetch("https://nix-portfolio.onrender.com/ping")
+      .then(res => res.text())
+      .then(data => console.log("Keep-alive:", data))
+      .catch(err => console.error("Ping failed:", err));
+  },10* 60 * 1000); // every 10 minutes
+
+  return () => clearInterval(interval);
+}, []);
+
   return (
     <div className="app">
       <Navigation />
