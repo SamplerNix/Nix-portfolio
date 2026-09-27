@@ -22,13 +22,21 @@ function UploadCV(){
       body:formData
     })
 
-    const data = await response.json()
-
-    alert(data.message)
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Upload failed");
+      }
+      alert(data.message || "CV uploaded successfully!");
+    } else {
+      const errorText = await response.text();
+      throw new Error(`Server returned HTTP ${response.status}: ${errorText.slice(0, 100)}`);
+    }
 
   }catch(error){
-    console.log(error)
-    alert("Upload failed")
+    console.error(error);
+    alert(`Upload failed: ${error.message}`);
   }
 
 }

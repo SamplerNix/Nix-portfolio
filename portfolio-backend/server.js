@@ -136,8 +136,17 @@ const profileStorage = new CloudinaryStorage({
 });
 const uploadProfile = multer({ storage: profileStorage });
 
-app.post("/upload-profile", uploadProfile.single("image"), (req, res) => {
-  res.json({ message: "Profile photo updated", url: req.file.path });
+app.post("/upload-profile", (req, res) => {
+  uploadProfile.single("image")(req, res, (err) => {
+    if (err) {
+      console.error("Profile upload error:", err);
+      return res.status(500).json({ message: "Profile upload failed", error: err.message });
+    }
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    res.json({ message: "Profile photo updated", url: req.file.path });
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -147,16 +156,24 @@ const cvStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "portfolio/cv",
-    public_id: () => "mycv",
+    public_id: () => "mycv.pdf",
     resource_type: "raw",
-    allowed_formats: ["pdf"],
     overwrite: true,
   },
 });
 const uploadCV = multer({ storage: cvStorage });
 
-app.post("/upload-cv", uploadCV.single("cv"), (req, res) => {
-  res.json({ message: "CV uploaded successfully", url: req.file.path });
+app.post("/upload-cv", (req, res) => {
+  uploadCV.single("cv")(req, res, (err) => {
+    if (err) {
+      console.error("CV upload error:", err);
+      return res.status(500).json({ message: "CV Upload failed", error: err.message });
+    }
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    res.json({ message: "CV uploaded successfully", url: req.file.path });
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
