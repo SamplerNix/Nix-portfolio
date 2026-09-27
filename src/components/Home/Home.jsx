@@ -1,8 +1,26 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const Home = () => {
+  const [profileUrl, setProfileUrl] = useState("");
+  const [cvUrl, setCvUrl] = useState("");
+
+  useEffect(() => {
+    // Fetch profile image URL from backend
+    fetch(`${BASE_URL}/uploads/profile/profile.jpg`)
+      .then((res) => {
+        // Cloudinary URL is stored directly, fallback to old path
+        setProfileUrl(`${BASE_URL}/uploads/profile/profile.jpg`);
+      })
+      .catch(() => {});
+  }, []);
+
   const handleViewCV = () => {
- window.open(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/mycv.pdf`, "_blank");
-};
+    // Open CV — if URL is a Cloudinary link it works directly
+    window.open(`${BASE_URL}/uploads/mycv.pdf`, "_blank");
+  };
   return (
     <div>
     <Maincontent className="hero">
@@ -15,7 +33,7 @@ const Home = () => {
         I build things for web</h1>
       </Namecal>
       <Gola>
-      <img src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/profile/profile.jpg`}/>
+      <img src={profileUrl || `${BASE_URL}/uploads/profile/profile.jpg`} alt="Profile" />
       </Gola>
     </Maincontent>
     <Cvbutton>

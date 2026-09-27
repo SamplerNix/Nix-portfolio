@@ -18,7 +18,10 @@ const AboutMe = () => {
 useEffect(() => {
   fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/experience`)
     .then((res) => res.json())
-    .then((data) => setExperiences(data));
+    .then((data) => {
+      if (Array.isArray(data)) setExperiences(data);
+    })
+    .catch((err) => console.error(err));
 }, []);
   const Educa = [
     {

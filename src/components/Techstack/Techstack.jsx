@@ -11,7 +11,11 @@ const Techstack = () => {
 
     fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/techstack`)
     .then(res=>res.json())
-    .then(data=>setTech(data))
+    .then(data=> {
+      // Guard: only set if it's actually an array
+      if (Array.isArray(data)) setTech(data);
+    })
+    .catch(err => console.error("Techstack fetch error:", err))
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -40,7 +44,7 @@ const Techstack = () => {
           {tech.map((t)=>(
             <img
               key={t.id}
-              src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/tech/${t.icon}`}
+              src={t.icon && (t.icon.startsWith("http://") || t.icon.startsWith("https://")) ? t.icon : `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/tech/${t.icon}`}
               alt={t.name}
             />
           ))}

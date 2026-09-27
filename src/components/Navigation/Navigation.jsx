@@ -26,7 +26,7 @@ const Navigation = () => {
           <div />
         </Hamburger>
       </div>
-      <Menu isOpen={isOpen}>
+      <Menu $isOpen={isOpen}>
         <ul>
           <li>
             <Link onClick={()=>setIsOpen(false)} to="/">Home</Link>
@@ -158,7 +158,7 @@ const Menu = styled.div`
   }
 
   @media (max-width: 768px) {
-    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
     flex-direction: column;
     justify-content: center;
     width: 100%;

@@ -1,357 +1,375 @@
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
-const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const mongoose = require("mongoose");
 const path = require("path");
+const fs = require("fs");
+const dns = require("dns");
 require("dotenv").config();
+
+// Fix Node.js DNS SRV lookup issues on Windows / local ISPs
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+} catch (e) {
+  console.log("DNS setServers warning:", e.message);
+}
 
 const app = express();
 
+// ─── Cloudinary Config ────────────────────────────────────────────────────────
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// ─── Schemas & Models ─────────────────────────────────────────────────────────
+const projectSchema = new mongoose.Schema({
+  id: Number,
+  title: String,
+  description: String,
+  tech: String,
+  link: String,
+  gitlink: String,
+  image: String,
+});
+
+const techSchema = new mongoose.Schema({
+  id: Number,
+  name: String,
+  icon: String,
+});
+
+const experienceSchema = new mongoose.Schema({
+  id: Number,
+  title: String,
+  organisation: String,
+  location: String,
+  date: String,
+  type: String,
+});
+
+const Project = mongoose.model("Project", projectSchema);
+const Tech = mongoose.model("Tech", techSchema);
+const Experience = mongoose.model("Experience", experienceSchema);
+
+// ─── Auto-seed function for initial JSON data ────────────────────────────────
+async function seedInitialData() {
+  try {
+    const projectCount = await Project.countDocuments();
+    if (projectCount === 0 && fs.existsSync(path.join(__dirname, "projects.json"))) {
+      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "projects.json")));
+      if (data.length > 0) {
+        await Project.insertMany(data);
+        console.log("Seeded initial projects data into MongoDB");
+      }
+    }
+
+    const techCount = await Tech.countDocuments();
+    if (techCount === 0 && fs.existsSync(path.join(__dirname, "techstack.json"))) {
+      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "techstack.json")));
+      if (data.length > 0) {
+        await Tech.insertMany(data);
+        console.log("Seeded initial techstack data into MongoDB");
+      }
+    }
+
+    const expCount = await Experience.countDocuments();
+    if (expCount === 0 && fs.existsSync(path.join(__dirname, "experience.json"))) {
+      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "experience.json")));
+      if (data.length > 0) {
+        await Experience.insertMany(data);
+        console.log("Seeded initial experience data into MongoDB");
+      }
+    }
+  } catch (err) {
+    console.error("Auto-seed error:", err.message);
+  }
+}
+
+// ─── MongoDB Connection ───────────────────────────────────────────────────────
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+    seedInitialData();
+  })
+  .catch((err) => console.error("MongoDB error:", err));
+
+// ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// ─── Admin Login ──────────────────────────────────────────────────────────────
 app.post("/admin-login", (req, res) => {
-
   const { password } = req.body;
-
   if (password === process.env.ADMIN_PASSWORD) {
     res.json({ success: true });
   } else {
     res.status(401).json({ success: false });
   }
-
-});
-//This one is for to wakeup our
-app.get('/ping', (req, res) => {
-  res.send('pong');
 });
 
-// allow frontend to access uploaded files
-app.use("/uploads", express.static("uploads"));
+// ─── Ping ────────────────────────────────────────────────────────────────────
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
 
 app.get("/", (req, res) => {
-  res.send("Backend running");
-});
-//---------------------------------- profile photo----------------------------------
-const profileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/profile");
-  },
-  filename: (req, file, cb) => {
-    cb(null, "profile.jpg");
-  },
+  res.send("Backend running on Vercel ✅");
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  PROFILE PHOTO
+// ─────────────────────────────────────────────────────────────────────────────
+const profileStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "portfolio/profile",
+    public_id: () => "profile",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    overwrite: true,
+  },
+});
 const uploadProfile = multer({ storage: profileStorage });
 
 app.post("/upload-profile", uploadProfile.single("image"), (req, res) => {
-  res.json({ message: "Profile photo updated" });
+  res.json({ message: "Profile photo updated", url: req.file.path });
 });
 
-// ================= CV UPLOAD =================
-
-const cvStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, "mycv.pdf");
+// ─────────────────────────────────────────────────────────────────────────────
+//  CV UPLOAD
+// ─────────────────────────────────────────────────────────────────────────────
+const cvStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "portfolio/cv",
+    public_id: () => "mycv",
+    resource_type: "raw",
+    allowed_formats: ["pdf"],
+    overwrite: true,
   },
 });
-
 const uploadCV = multer({ storage: cvStorage });
 
 app.post("/upload-cv", uploadCV.single("cv"), (req, res) => {
-  res.json({ message: "CV uploaded successfully" });
+  res.json({ message: "CV uploaded successfully", url: req.file.path });
 });
 
-
-// ================= PROJECT IMAGE UPLOAD =================
-
-const projectStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/projects");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+// ─────────────────────────────────────────────────────────────────────────────
+//  PROJECTS
+// ─────────────────────────────────────────────────────────────────────────────
+const projectStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "portfolio/projects",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
-
 const uploadProject = multer({ storage: projectStorage });
 
-app.post("/add-project", uploadProject.single("image"), (req, res) => {
-
-  const projects = JSON.parse(fs.readFileSync("projects.json"));
-
-  const newProject = {
-    id: Date.now(),
-    title: req.body.title,
-    description: req.body.description,
-    tech: req.body.tech,
-    link: req.body.link,
-    gitlink: req.body.gitlink,
-   image: req.file.filename
-  };
-
-  projects.push(newProject);
-
-  fs.writeFileSync(
-    "projects.json",
-    JSON.stringify(projects, null, 2)
-  );
-
-  res.json({ message: "Project saved successfully" });
-
-});
-
-
-// ================= GET PROJECTS =================
-
-app.get("/projects", (req, res) => {
-
-  const projects = JSON.parse(fs.readFileSync("projects.json"));
-
-  res.json(projects);
-
-});
-
-// ================= Delete Project ================------------------------------------------
-app.delete("/delete-project/:id", (req, res) => {
-
-  const id = req.params.id;
-
-  const projects = JSON.parse(
-    fs.readFileSync("projects.json")
-  );
-
-  const projectToDelete = projects.find(p => p.id == id);
-
-  if (!projectToDelete) {
-    return res.json({ message: "Project not found" });
+// Add Project
+app.post("/add-project", uploadProject.single("image"), async (req, res) => {
+  try {
+    const newProject = new Project({
+      id: Date.now(),
+      title: req.body.title,
+      description: req.body.description,
+      tech: req.body.tech,
+      link: req.body.link,
+      gitlink: req.body.gitlink,
+      image: req.file.path, // full Cloudinary URL
+    });
+    await newProject.save();
+    res.json({ message: "Project saved successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error saving project", error: err.message });
   }
-
-  // correct image path
-  const imagePath = path.join(
-    __dirname,
-    "uploads",
-    "projects",
-    projectToDelete.image
-  );
-
-  console.log("Deleting image:", imagePath);
-
-  if (fs.existsSync(imagePath)) {
-    fs.unlinkSync(imagePath);
-    console.log("Image deleted");
-  } else {
-    console.log("Image not found");
-  }
-
-  const updatedProjects = projects.filter(
-    p => p.id != id
-  );
-
-  fs.writeFileSync(
-    "projects.json",
-    JSON.stringify(updatedProjects, null, 2)
-  );
-
-  res.json({ message: "Project deleted" });
-
 });
 
-// ================= Update Project ================---------------------------------
+// Get All Projects
+app.get("/projects", async (req, res) => {
+  try {
+    const projects = await Project.find();
+    if (projects && projects.length > 0) return res.json(projects);
+    // Fallback to local projects.json if DB empty
+    const localData = JSON.parse(fs.readFileSync(path.join(__dirname, "projects.json")));
+    res.json(localData);
+  } catch (err) {
+    try {
+      const localData = JSON.parse(fs.readFileSync(path.join(__dirname, "projects.json")));
+      res.json(localData);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching projects", error: err.message });
+    }
+  }
+});
 
-app.put("/update-project/:id", (req, res) => {
+// Delete Project
+app.delete("/delete-project/:id", async (req, res) => {
+  try {
+    const project = await Project.findOne({ id: req.params.id });
 
-  const id = req.params.id;
+    if (!project) return res.json({ message: "Project not found" });
 
-  const projects = JSON.parse(fs.readFileSync("projects.json"));
-
-  const updatedProjects = projects.map((project) => {
-
-    if (project.id == id) {
-      return { ...project, ...req.body };
+    // Delete image from Cloudinary
+    if (project.image) {
+      const urlParts = project.image.split("/");
+      const fileWithExt = urlParts[urlParts.length - 1];
+      const publicId = `portfolio/projects/${fileWithExt.split(".")[0]}`;
+      await cloudinary.uploader.destroy(publicId);
     }
 
-    return project;
-  });
-
-  fs.writeFileSync(
-    "projects.json",
-    JSON.stringify(updatedProjects, null, 2)
-  );
-
-  res.json({ message: "Project updated" });
-
-});
-// ================= Techstack ================-----------------------------------------------
-const techStorage = multer.diskStorage({
- destination: (req,file,cb)=>{
-  cb(null,"uploads/tech")
- },
- filename:(req,file,cb)=>{
-  cb(null,Date.now()+"-"+file.originalname)
- }
-})
-
-const uploadTech = multer({storage:techStorage})
-
-app.post("/add-tech", uploadTech.single("icon"), (req,res)=>{
-
- const techStack = JSON.parse(
-  fs.readFileSync("techstack.json")
- )
-
- const newTech = {
-  id:Date.now(),
-  name:req.body.name,
-  icon:req.file.filename
- }
-
- techStack.push(newTech)
-
- fs.writeFileSync(
-  "techstack.json",
-  JSON.stringify(techStack,null,2)
- )
-
- res.json({message:"Tech added"})
-
-})
-app.get("/techstack",(req,res)=>{
-
- const techStack = JSON.parse(
-  fs.readFileSync("techstack.json")
- )
-
- res.json(techStack)
-
-})
-// techstack ko delete krne ke liye------------------------------------------------
-app.delete("/delete-tech/:id",(req,res)=>{
-
- const id=req.params.id
-
- const techStack = JSON.parse(
-  fs.readFileSync("techstack.json")
- )
- const techToDelete = techStack.find(t=>t.id==id)
-
- if(techToDelete){
-
-  const iconPath = path.join(
-   __dirname,
-   "uploads",
-   "tech",
-   techToDelete.icon
-  )
-
-  if(fs.existsSync(iconPath)){
-   fs.unlinkSync(iconPath)
+    await Project.deleteOne({ id: req.params.id });
+    res.json({ message: "Project deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting project", error: err.message });
   }
-
- }
-//---------------------------Update krne ke liye techstack ko----------------------------------------
- const updated = techStack.filter(
-  t=>t.id!=id
- )
-
- fs.writeFileSync(
-  "techstack.json",
-  JSON.stringify(updated,null,2)
- )
-
- res.json({message:"Tech deleted"})
-
-})
-// ---------------------------------------GET EXPERIENCE--------------------------------------------
-app.get("/experience", (req, res) => {
-
-  const data = JSON.parse(
-    fs.readFileSync("experience.json")
-  );
-
-  res.json(data);
-
 });
 
-
-// -------------------ADD EXPERIENCE---------------------------------------
-app.post("/add-experience", (req, res) => {
-
-  const experiences = JSON.parse(
-    fs.readFileSync("experience.json")
-  );
-
-  const newExperience = {
-    id: Date.now(),
-    title: req.body.title,
-    organisation: req.body.organisation,
-    location: req.body.location,
-    date: req.body.date,
-    type: req.body.type
-  };
-
-  experiences.push(newExperience);
-
-  fs.writeFileSync(
-    "experience.json",
-    JSON.stringify(experiences, null, 2)
-  );
-
-  res.json({ message: "Experience added successfully" });
-
+// Update Project
+app.put("/update-project/:id", async (req, res) => {
+  try {
+    await Project.updateOne({ id: req.params.id }, { $set: req.body });
+    res.json({ message: "Project updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating project", error: err.message });
+  }
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  TECH STACK
+// ─────────────────────────────────────────────────────────────────────────────
+const techStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "portfolio/tech",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "svg"],
+  },
+});
+const uploadTech = multer({ storage: techStorage });
 
-// DELETE EXPERIENCE
-app.delete("/delete-experience/:id", (req, res) => {
-
-  let experiences = JSON.parse(
-    fs.readFileSync("experience.json")
-  );
-
-  experiences = experiences.filter(
-    e => e.id != req.params.id
-  );
-
-  fs.writeFileSync(
-    "experience.json",
-    JSON.stringify(experiences, null, 2)
-  );
-
-  res.json({ message: "Experience deleted" });
-
+// Add Tech
+app.post("/add-tech", uploadTech.single("icon"), async (req, res) => {
+  try {
+    const newTech = new Tech({
+      id: Date.now(),
+      name: req.body.name,
+      icon: req.file.path, // full Cloudinary URL
+    });
+    await newTech.save();
+    res.json({ message: "Tech added" });
+  } catch (err) {
+    res.status(500).json({ message: "Error adding tech", error: err.message });
+  }
 });
 
+// Get All Tech
+app.get("/techstack", async (req, res) => {
+  try {
+    const techStack = await Tech.find();
+    if (techStack && techStack.length > 0) return res.json(techStack);
+    // Fallback to local techstack.json
+    const localData = JSON.parse(fs.readFileSync(path.join(__dirname, "techstack.json")));
+    res.json(localData);
+  } catch (err) {
+    try {
+      const localData = JSON.parse(fs.readFileSync(path.join(__dirname, "techstack.json")));
+      res.json(localData);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching tech stack", error: err.message });
+    }
+  }
+});
 
-// UPDATE EXPERIENCE
-app.put("/update-experience/:id", (req, res) => {
+// Delete Tech
+app.delete("/delete-tech/:id", async (req, res) => {
+  try {
+    const tech = await Tech.findOne({ id: req.params.id });
 
-  let experiences = JSON.parse(
-    fs.readFileSync("experience.json")
-  );
-
-  experiences = experiences.map(e => {
-
-    if(e.id == req.params.id){
-      return { ...e, ...req.body };
+    if (tech && tech.icon) {
+      const urlParts = tech.icon.split("/");
+      const fileWithExt = urlParts[urlParts.length - 1];
+      const publicId = `portfolio/tech/${fileWithExt.split(".")[0]}`;
+      await cloudinary.uploader.destroy(publicId);
     }
 
-    return e;
-
-  });
-
-  fs.writeFileSync(
-    "experience.json",
-    JSON.stringify(experiences, null, 2)
-  );
-
-  res.json({ message: "Experience updated" });
-
+    await Tech.deleteOne({ id: req.params.id });
+    res.json({ message: "Tech deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting tech", error: err.message });
+  }
 });
 
-app.listen(process.env.PORT ||5000, () => {
-  console.log("Server running on port 5000");
+// ─────────────────────────────────────────────────────────────────────────────
+//  EXPERIENCE
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Get Experience
+app.get("/experience", async (req, res) => {
+  try {
+    const data = await Experience.find();
+    if (data && data.length > 0) return res.json(data);
+    // Fallback to local experience.json
+    const localData = JSON.parse(fs.readFileSync(path.join(__dirname, "experience.json")));
+    res.json(localData);
+  } catch (err) {
+    try {
+      const localData = JSON.parse(fs.readFileSync(path.join(__dirname, "experience.json")));
+      res.json(localData);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching experience", error: err.message });
+    }
+  }
 });
+
+// Add Experience
+app.post("/add-experience", async (req, res) => {
+  try {
+    const newExperience = new Experience({
+      id: Date.now(),
+      title: req.body.title,
+      organisation: req.body.organisation,
+      location: req.body.location,
+      date: req.body.date,
+      type: req.body.type,
+    });
+    await newExperience.save();
+    res.json({ message: "Experience added successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error adding experience", error: err.message });
+  }
+});
+
+// Delete Experience
+app.delete("/delete-experience/:id", async (req, res) => {
+  try {
+    await Experience.deleteOne({ id: req.params.id });
+    res.json({ message: "Experience deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting experience", error: err.message });
+  }
+});
+
+// Update Experience
+app.put("/update-experience/:id", async (req, res) => {
+  try {
+    await Experience.updateOne({ id: req.params.id }, { $set: req.body });
+    res.json({ message: "Experience updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating experience", error: err.message });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Start server (local dev only — Vercel handles this in production)
+// ─────────────────────────────────────────────────────────────────────────────
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;

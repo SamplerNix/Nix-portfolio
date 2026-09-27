@@ -2,11 +2,16 @@ import styles from './Projectcard.module.css'
 
 const Projectcard = ({ image, title, description, tech, link, gitlink }) => {
 
+  const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const imageSrc = image && (image.startsWith("http://") || image.startsWith("https://"))
+    ? image
+    : `${BASE_URL}/uploads/projects/${image}`;
+
   return (
     <div className={styles.card}>
 
       <img
-        src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/projects/${image}`}
+        src={imageSrc}
         alt={title}
         className={styles.image}
       />

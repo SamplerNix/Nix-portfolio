@@ -12,7 +12,7 @@ const Projects = () => {
     fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/projects`)
       .then((res) => res.json())
       .then((data) => {
-        setProjects(data);
+        if (Array.isArray(data)) setProjects(data);
       })
       .catch((err) => console.log(err));
 
