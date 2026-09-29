@@ -1,5 +1,6 @@
 import { useState } from "react";
-import style from './Admin.module.css'
+import style from './Admin.module.css';
+import { API_URL } from "../config";
 
 function UploadCV(){
 
@@ -17,7 +18,7 @@ function UploadCV(){
 
   try{
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/upload-cv`,{
+    const response = await fetch(`${API_URL}/upload-cv`,{
       method:"POST",
       body:formData
     })

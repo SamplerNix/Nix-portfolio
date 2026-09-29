@@ -1,5 +1,6 @@
 import { useState } from "react";
 import style from "./AddExperience.module.css";
+import { API_URL } from "../config";
 
 function AddExperience(){
 
@@ -12,7 +13,7 @@ function AddExperience(){
  const handleSubmit = async(e)=>{
   e.preventDefault()
 
-  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/add-experience`,{
+  await fetch(`${API_URL}/add-experience`,{
    method:"POST",
    headers:{
     "Content-Type":"application/json"

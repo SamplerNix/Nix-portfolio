@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import styles from "./ManageTech.module.css"
 import AddTech from "./AddTech"
+import { API_URL } from "../config"
 
 function ManageTech(){
 
@@ -8,7 +9,7 @@ function ManageTech(){
 
  useEffect(()=>{
 
-  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/techstack`)
+  fetch(`${API_URL}/techstack`)
   .then(res=>res.json())
   .then(data=>setTech(data))
 
@@ -16,7 +17,7 @@ function ManageTech(){
 
  const deleteTech = async(id)=>{
 
-  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/delete-tech/${id}`,{
+  await fetch(`${API_URL}/delete-tech/${id}`,{
     method:"DELETE"
   })
 
@@ -42,7 +43,7 @@ function ManageTech(){
 
       <img
        className={styles.techIcon}
-       src={`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/tech/${t.icon}`}
+       src={t.icon && (t.icon.startsWith("http://") || t.icon.startsWith("https://")) ? t.icon : `${API_URL}/uploads/tech/${t.icon}`}
        alt={t.name}
       />
 

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Projectcard from "./Projectcard";
 import { useEffect, useState, useRef } from "react";
+import { API_URL } from "../../config";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]); 
@@ -9,7 +10,7 @@ const Projects = () => {
   const domRef = useRef();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/projects`)
+    fetch(`${API_URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setProjects(data);

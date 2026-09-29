@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import style from './Admin.module.css'
+import style from './Admin.module.css';
+import { API_URL } from "../config";
+
 function Adminlogin(){
 
  const [password,setPassword] = useState("")
@@ -10,21 +12,30 @@ const handleLogin = async (e) => {
 
     e.preventDefault();
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/admin-login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ password })
-    });
+    try {
+      const res = await fetch(`${API_URL}/admin-login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password })
+      });
 
-    const data = await res.json();
-
-    if(data.success){
-      localStorage.setItem("adminAuth","true");
-      navigate("/admin/dashboard");
-    } else {
-      alert("Wrong password");
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        if(data.success){
+          localStorage.setItem("adminAuth","true");
+          navigate("/admin/dashboard");
+        } else {
+          alert("Wrong password");
+        }
+      } else {
+        alert(`Login failed (HTTP ${res.status}). Please check backend status and VITE_API_URL.`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Unable to reach backend server. Please check VITE_API_URL setting.");
     }
 
   };

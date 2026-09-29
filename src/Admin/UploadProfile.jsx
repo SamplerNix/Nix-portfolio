@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config";
 
 function UploadProfile() {
 
@@ -11,7 +12,7 @@ function UploadProfile() {
     const formData = new FormData()
     formData.append("image",image)
 
-    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/upload-profile`,{
+    await fetch(`${API_URL}/upload-profile`,{
       method:"POST",
       body:formData
     })

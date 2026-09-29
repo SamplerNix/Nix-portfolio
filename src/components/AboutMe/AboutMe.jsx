@@ -3,6 +3,8 @@ import style from "./Experience.module.css";
 import Experience from "./Experience";
 import Education from "./Education";
 import { useState,useEffect } from "react";
+import { API_URL } from "../../config";
+
 const AboutMe = () => {
   // const Experiences = [
   //   {
@@ -16,7 +18,7 @@ const AboutMe = () => {
   const [Experiences, setExperiences] = useState([]);
 
 useEffect(() => {
-  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/experience`)
+  fetch(`${API_URL}/experience`)
     .then((res) => res.json())
     .then((data) => {
       if (Array.isArray(data)) setExperiences(data);

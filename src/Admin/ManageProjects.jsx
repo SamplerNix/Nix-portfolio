@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AddProject from "./AddProject";
 import styles from "./ManageProjects.module.css";
+import { API_URL } from "../config";
 
 function ManageProjects() {
 
@@ -10,7 +11,7 @@ function ManageProjects() {
   // FETCH PROJECTS
   useEffect(() => {
 
-    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/projects`)
+    fetch(`${API_URL}/projects`)
       .then(res => res.json())
       .then(data => setProjects(data));
 
@@ -19,7 +20,7 @@ function ManageProjects() {
   // DELETE PROJECT
   const deleteProject = async (id) => {
 
-    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/delete-project/${id}`, {
+    await fetch(`${API_URL}/delete-project/${id}`, {
       method: "DELETE"
     });
 
@@ -35,7 +36,7 @@ function ManageProjects() {
   // UPDATE PROJECT
   const updateProject = async () => {
 
-    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/update-project/${editingProject.id}`, {
+    await fetch(`${API_URL}/update-project/${editingProject.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

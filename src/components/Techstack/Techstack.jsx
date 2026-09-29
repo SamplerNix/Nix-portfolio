@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { useEffect, useState, useRef } from "react"
+import { API_URL } from "../../config"
 
 const Techstack = () => {
 
@@ -9,7 +10,7 @@ const Techstack = () => {
 
   useEffect(()=>{
 
-    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/techstack`)
+    fetch(`${API_URL}/techstack`)
     .then(res=>res.json())
     .then(data=> {
       // Guard: only set if it's actually an array
@@ -44,7 +45,7 @@ const Techstack = () => {
           {tech.map((t)=>(
             <img
               key={t.id}
-              src={t.icon && (t.icon.startsWith("http://") || t.icon.startsWith("https://")) ? t.icon : `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/tech/${t.icon}`}
+              src={t.icon && (t.icon.startsWith("http://") || t.icon.startsWith("https://")) ? t.icon : `${API_URL}/uploads/tech/${t.icon}`}
               alt={t.name}
             />
           ))}

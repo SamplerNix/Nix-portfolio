@@ -1,5 +1,6 @@
 import { useState } from "react"
 import styles from "./ManageTech.module.css"
+import { API_URL } from "../config"
 
 function AddTech(){
 
@@ -14,7 +15,7 @@ function AddTech(){
   formData.append("name",name)
   formData.append("icon",icon)
 
-  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/add-tech`,{
+  await fetch(`${API_URL}/add-tech`,{
    method:"POST",
    body:formData
   })

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./AddProject.module.css";
+import { API_URL } from "../config";
 
 function AddProject() {
 
@@ -23,7 +24,7 @@ function AddProject() {
     formData.append("gitlink", gitlink);
     formData.append("image", image);
 
-    await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/add-project`, {
+    await fetch(`${API_URL}/add-project`, {
       method: "POST",
       body: formData
     });

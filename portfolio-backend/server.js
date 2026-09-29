@@ -176,6 +176,21 @@ app.post("/upload-cv", (req, res) => {
   });
 });
 
+app.get("/uploads/mycv.pdf", (req, res) => {
+  const localPath = path.join(__dirname, "uploads", "mycv.pdf");
+  if (fs.existsSync(localPath)) {
+    return res.sendFile(localPath);
+  }
+  if (process.env.CLOUD_NAME) {
+    const cloudinaryUrl = cloudinary.url("portfolio/cv/mycv.pdf", {
+      resource_type: "raw",
+      secure: true,
+    });
+    return res.redirect(cloudinaryUrl);
+  }
+  res.status(404).send("CV file not found. Please upload a CV from the Admin Panel (/admin/upload-cv) or place mycv.pdf in portfolio-backend/uploads/");
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  PROJECTS
 // ─────────────────────────────────────────────────────────────────────────────

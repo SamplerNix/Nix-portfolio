@@ -1,8 +1,9 @@
 import styles from './Projectcard.module.css'
+import { API_URL } from '../../config'
 
 const Projectcard = ({ image, title, description, tech, link, gitlink }) => {
 
-  const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const BASE_URL = API_URL;
   const imageSrc = image && (image.startsWith("http://") || image.startsWith("https://"))
     ? image
     : `${BASE_URL}/uploads/projects/${image}`;

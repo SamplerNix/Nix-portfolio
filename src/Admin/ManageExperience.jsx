@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import AddExperience from "./AddExperience";
 import style from "./ManageExperience.module.css";
+import { API_URL } from "../config";
+
 function ManageExperience(){
 
  const [experiences,setExperiences] = useState([]);
@@ -14,7 +16,7 @@ function ManageExperience(){
 
  useEffect(()=>{
 
-  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/experience`)
+  fetch(`${API_URL}/experience`)
   .then(res=>res.json())
   .then(data=>setExperiences(data));
 
@@ -23,7 +25,7 @@ function ManageExperience(){
 
  const deleteExperience = async(id)=>{
 
-  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/delete-experience/${id}`,{
+  await fetch(`${API_URL}/delete-experience/${id}`,{
    method:"DELETE"
   });
 
@@ -51,7 +53,7 @@ function ManageExperience(){
 
   e.preventDefault();
 
-  await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/update-experience/${editingExperience}`,{
+  await fetch(`${API_URL}/update-experience/${editingExperience}`,{
    method:"PUT",
    headers:{
     "Content-Type":"application/json"
