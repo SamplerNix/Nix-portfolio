@@ -6,20 +6,33 @@ function UploadProfile() {
   const [image,setImage] = useState(null)
 
   const handleUpload = async (e) => {
+    e.preventDefault();
 
-    e.preventDefault()
+    if (!image) {
+      alert("Please select a file first");
+      return;
+    }
 
-    const formData = new FormData()
-    formData.append("image",image)
+    const formData = new FormData();
+    formData.append("image", image);
 
-    await fetch(`${API_URL}/upload-profile`,{
-      method:"POST",
-      body:formData
-    })
+    try {
+      const res = await fetch(`${API_URL}/upload-profile`, {
+        method: "POST",
+        body: formData,
+      });
 
-    alert("Profile photo updated")
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Upload failed");
+      }
 
-  }
+      alert(data.message || "Profile photo updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
 
   return (
 

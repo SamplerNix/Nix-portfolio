@@ -7,21 +7,31 @@ function AddTech(){
  const [name,setName] = useState("")
  const [icon,setIcon] = useState(null)
 
- const handleSubmit = async(e)=>{
-  e.preventDefault()
+ const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const formData = new FormData()
+    const formData = new FormData();
+    formData.append("name", name);
+    if (icon) {
+      formData.append("icon", icon);
+    }
 
-  formData.append("name",name)
-  formData.append("icon",icon)
+    try {
+      const res = await fetch(`${API_URL}/add-tech`, {
+        method: "POST",
+        body: formData,
+      });
 
-  await fetch(`${API_URL}/add-tech`,{
-   method:"POST",
-   body:formData
-  })
-
-  alert("Tech Added")
- }
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to add tech");
+      }
+      alert(data.message || "Tech Added");
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
 
  return(
 

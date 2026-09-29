@@ -10,25 +10,34 @@ function AddExperience(){
  const [date,setDate] = useState("")
  const [type,setType] = useState("")
 
- const handleSubmit = async(e)=>{
-  e.preventDefault()
+ const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  await fetch(`${API_URL}/add-experience`,{
-   method:"POST",
-   headers:{
-    "Content-Type":"application/json"
-   },
-   body:JSON.stringify({
-    title,
-    organisation,
-    location,
-    date,
-    type
-   })
-  })
+    try {
+      const res = await fetch(`${API_URL}/add-experience`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          organisation,
+          location,
+          date,
+          type,
+        }),
+      });
 
-  alert("Experience Added")
- }
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to add experience");
+      }
+      alert(data.message || "Experience Added");
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
 
  return(
 

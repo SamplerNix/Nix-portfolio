@@ -10,12 +10,18 @@ const Home = () => {
 
   useEffect(() => {
     // Fetch profile image URL from backend
-    fetch(`${BASE_URL}/uploads/profile/profile.jpg`)
-      .then((res) => {
-        // Cloudinary URL is stored directly, fallback to old path
-        setProfileUrl(`${BASE_URL}/uploads/profile/profile.jpg`);
+    fetch(`${BASE_URL}/get-profile`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.url) {
+          setProfileUrl(data.url);
+        } else {
+          setProfileUrl(`${BASE_URL}/uploads/profile/profile.jpg`);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        setProfileUrl(`${BASE_URL}/uploads/profile/profile.jpg`);
+      });
   }, []);
 
   const handleViewCV = () => {

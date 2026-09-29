@@ -12,25 +12,33 @@ function AddProject() {
   const [image, setImage] = useState(null);
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     const formData = new FormData();
-
     formData.append("title", title);
     formData.append("description", description);
     formData.append("tech", tech);
     formData.append("link", link);
     formData.append("gitlink", gitlink);
-    formData.append("image", image);
+    if (image) {
+      formData.append("image", image);
+    }
 
-    await fetch(`${API_URL}/add-project`, {
-      method: "POST",
-      body: formData
-    });
+    try {
+      const res = await fetch(`${API_URL}/add-project`, {
+        method: "POST",
+        body: formData,
+      });
 
-    alert("Project added successfully");
-
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to add project");
+      }
+      alert(data.message || "Project added successfully");
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
   };
 
   return (
